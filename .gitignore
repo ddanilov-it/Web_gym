@@ -6,14 +6,9 @@ yarn-error.log
 dist/
 /build/
 
-*.swp
-*.swo
-*.vscode/
 
 *.log
 
-# Среда разработки
 .idea/
-
 
 .env
