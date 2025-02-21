@@ -1,71 +1,16 @@
-import express from "express";
-import { registerAdmin, loginAdmin } from "../controllers/authController";
+import express, { Request, Response } from "express";
+import { registerAdmin, loginAdmin, getAllAdmins } from "../controllers/authController";  // Path to controller
+import { authenticateUser } from "../middleware/authMiddleware";
 
-const router = express.Router();
+const router = express.Router();  // Proper initialization of the router
 
-/**
- * @swagger
- * /api/register:
- *   post:
- *     summary: Register a new admin
- *     description: Registers an admin with a username and password
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: Admin registered successfully
- *       400:
- *         description: Missing username or password
- *       500:
- *         description: Internal server error
- */
+// Define routes
 router.post("/register", registerAdmin);
-
-/**
- * @swagger
- * /api/login:
- *   post:
- *     summary: Login an admin
- *     description: Logs in an admin with username and password
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Login successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 token:
- *                   type: string
- *       400:
- *         description: Missing username or password
- *       401:
- *         description: Invalid credentials
- *       500:
- *         description: Internal server error
- */
 router.post("/login", loginAdmin);
+router.get("/admins", authenticateUser, getAllAdmins);
+
+router.get("/protected", authenticateUser, (req: Request, res: Response) => {
+  res.json({ message: "This is a protected route", user: req.user });
+});
 
 export default router;

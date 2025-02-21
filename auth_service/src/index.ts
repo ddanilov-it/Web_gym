@@ -21,7 +21,7 @@ app.use("/api", authRoutes);
 
 initDb().then(() => {
     app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
+        console.log(`Server running on port ${port} 1 `);
     });
 }).catch(err => {
     console.error("Failed to initialize database", err);

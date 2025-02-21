@@ -1,97 +1,59 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import { createAdmin, getAdminByUsername } from "../repositories/adminRepository";
+import { createAdmin, getAdminByEmail, getAllAdmins as getAdminsFromRepo } from "../repositories/adminRepository";
 import { hashPassword, comparePassword } from "../services/passwordService";
 import { generateToken } from "../services/authServices";
 
 /**
- * @swagger
- * /api/register:
- *   post:
- *     summary: Register a new admin
- *     description: Registers an admin with a username and password
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: Admin registered successfully
- *       400:
- *         description: Missing username or password
- *       500:
- *         description: Internal server error
+ * Register a new admin
  */
 export const registerAdmin = asyncHandler(async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { username, password, firstName, lastName, email } = req.body;
+
+  if (!username || !password || !email || !firstName || !lastName) {
     res.status(400);
-    throw new Error("Username and password are required");
+    throw new Error("All fields are required");
   }
+
   const hashedPassword = await hashPassword(password);
-  const adminId = await createAdmin(username, hashedPassword);
+  const adminId = await createAdmin(username, hashedPassword, firstName, lastName, email);
+
   res.status(201).json({ message: "Admin registered", adminId });
 });
 
 /**
- * @swagger
- * /api/login:
- *   post:
- *     summary: Login an admin
- *     description: Logs in an admin with username and password
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Login successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 token:
- *                   type: string
- *       400:
- *         description: Missing username or password
- *       401:
- *         description: Invalid credentials
- *       500:
- *         description: Internal server error
+ * Login an admin using email
  */
 export const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  console.log("GOOOOOOOOOOOOOOOOOD");
+  const { email, password } = req.body;
+
+  if (!email || !password) {
     res.status(400);
-    throw new Error("Username and password are required");
+    throw new Error("Email and password are required");
   }
-  const admin = await getAdminByUsername(username);
+
+  const admin = await getAdminByEmail(email);
   if (!admin) {
     res.status(401);
     throw new Error("Invalid credentials");
   }
+
   const isMatch = await comparePassword(password, admin.password);
   if (!isMatch) {
     res.status(401);
     throw new Error("Invalid credentials");
   }
-  const token = generateToken(admin.id);
+  console.log("GOOOOOOOOOOOOOOOOOD");
+  const token = generateToken(admin.id, admin.email);
+  console.log("GOOOOOOOOOOOOOOOOOD");
   res.json({ message: "Login successful", token });
+});
+
+/**
+ * Get all admins
+ */
+export const getAllAdmins = asyncHandler(async (req: Request, res: Response) => {
+  const admins = await getAdminsFromRepo();
+  res.json({ admins });
 });
