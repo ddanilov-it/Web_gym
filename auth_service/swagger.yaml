@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: Admin Authentication API
+  description: API for admin authentication, including login and registration.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /register:
+    post:
+      summary: Register a new admin
+      description: Registers an admin with a username and password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "admin123"
+                password:
+                  type: string
+                  example: "securepassword"
+      responses:
+        "201":
+          description: Admin registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Admin registered"
+                  adminId:
+                    type: integer
+                    example: 1
+        "400":
+          description: Missing username or password
+        "500":
+          description: Internal server error
+
+  /login:
+    post:
+      summary: Login an admin
+      description: Logs in an admin with a username and password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "admin123"
+                password:
+                  type: string
+                  example: "securepassword"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        "400":
+          description: Missing username or password
+        "401":
+          description: Invalid credentials
+        "500":
+          description: Internal server error
