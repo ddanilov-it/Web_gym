@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthFormProps {
   onAuthSuccess: (token: string) => void;
@@ -7,27 +8,41 @@ interface AuthFormProps {
 
 const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
   const [isRegister, setIsRegister] = useState(false);
-  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const navigate = useNavigate(); // Добавляем навигацию
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
+    const API_URL = 'http://156.253.220.36:5000/api';
+    const endpoint = isRegister ? `${API_URL}/register` : `${API_URL}/login`;
 
     const userData = isRegister
-      ? { fullName, email, password }
+      ? { username, firstName, lastName, email, password }
       : { email, password };
+
+    console.log('Отправка данных на сервер:', userData);
 
     try {
       const response = await axios.post(endpoint, userData);
       const token = response.data.token;
-      if (token) {
+
+      if (isRegister) {
+        alert('Регистрация успешна! Теперь войдите в систему.');
+        setIsRegister(false);
+      } else if (token) {
         localStorage.setItem('token', token);
+        localStorage.setItem('userEmail', email);
         onAuthSuccess(token);
+        console.log('Toooooooooken', token)
+        navigate('/subscriptions');  // Редирект после успешного входа
       } else {
         setError('Не удалось получить токен.');
       }
@@ -51,19 +66,41 @@ const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           {isRegister && (
-            <div>
-              <label htmlFor="fullName" className="block text-sm font-medium">
-                ФИО
-              </label>
-              <input
-                type="text"
-                id="fullName"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
-              />
-            </div>
+            <>
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium">Логин</label>
+                <input
+                  type="text"
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+                />
+              </div>
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium">Имя</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+                />
+              </div>
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium">Фамилия</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  className="w-full p-2 border rounded-lg focus:ring focus:ring-blue-300"
+                />
+              </div>
+            </>
           )}
 
           <div>

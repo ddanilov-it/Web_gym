@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
@@ -14,18 +13,9 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/auth"
-          element={<AuthForm onAuthSuccess={handleAuthSuccess} />}
-        />
-        <Route
-          path="/"
-          element={token ? <h1>Добро пожаловать!</h1> : <Navigate to="/auth" />}
-        />
-        <Route
-          path="/subscriptions"
-          element={<SubscriptionTable /> }
-        />
+        <Route path="/auth" element={<AuthForm onAuthSuccess={handleAuthSuccess} />} />
+        <Route path="/" element={token ? <Navigate to="/subscriptions" /> : <Navigate to="/auth" />} />
+        <Route path="/subscriptions" element={token ? <SubscriptionTable /> : <Navigate to="/auth" />} />
       </Routes>
     </Router>
   );
