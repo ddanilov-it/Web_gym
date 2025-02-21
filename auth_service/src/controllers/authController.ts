@@ -15,6 +15,14 @@ export const registerAdmin = asyncHandler(async (req: Request, res: Response) =>
     throw new Error("All fields are required");
   }
 
+  // Check if email or username already exists
+  const existingEmail = await getAdminByEmail(email);
+  if (existingEmail) {
+    res.status(409); // Conflict
+    throw new Error("Email is already registered");
+  }
+
+
   const hashedPassword = await hashPassword(password);
   const adminId = await createAdmin(username, hashedPassword, firstName, lastName, email);
 
