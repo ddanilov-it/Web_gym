@@ -1,6 +1,17 @@
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
+
+// Загружаем переменные окружения из файла .env
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+// Чтение ключей из файлов, если они есть
+const privateKeyPath = process.env.JWT_PRIVATE_KEY_PATH!;
+const publicKeyPath = process.env.JWT_PUBLIC_KEY_PATH!;
+
+// Проверяем существование файлов ключей
+const privateKey = fs.readFileSync(privateKeyPath, "utf8");
+const publicKey = fs.readFileSync(publicKeyPath, "utf8");
 
 export const config = {
     port: process.env.PORT || 3000,
@@ -11,5 +22,6 @@ export const config = {
         password: process.env.DB_PASS,
         port: Number(process.env.DB_PORT) || 5432,
     },
-    jwtSecret: process.env.JWT_SECRET as string,
+    jwtPrivateKey: privateKey,  // Используем приватный ключ
+    jwtPublicKey: publicKey,    // Используем публичный ключ
 };

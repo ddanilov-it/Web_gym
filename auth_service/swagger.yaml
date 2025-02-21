@@ -1,11 +1,11 @@
 openapi: 3.0.0
 info:
-  title: Admin Authentication API
-  description: API for admin authentication, including login and registration.
+  title: API для аутентификации администраторов
+  description: API для регистрации и аутентификации администраторов.
   version: 1.0.0
 servers:
-  - url: http://localhost:3000/api
-    description: Local development server
+  - url: http://156.253.220.36:5000/api
+    description: Локальный сервер разработки
 
 components:
   securitySchemes:
@@ -20,8 +20,8 @@ security:
 paths:
   /register:
     post:
-      summary: Register a new admin
-      description: Registers an admin with a username and password.
+      summary: Зарегистрировать нового администратора
+      description: Регистрирует администратора с именем пользователя и паролем.
       requestBody:
         required: true
         content:
@@ -35,9 +35,18 @@ paths:
                 password:
                   type: string
                   example: "securepassword"
+                firstName:
+                  type: string
+                  example: "Иван"
+                lastName:
+                  type: string
+                  example: "Иванов"
+                email:
+                  type: string
+                  example: "admin@example.com"
       responses:
         "201":
-          description: Admin registered successfully
+          description: Администратор успешно зарегистрирован
           content:
             application/json:
               schema:
@@ -45,19 +54,19 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Admin registered"
+                    example: "Администратор зарегистрирован"
                   adminId:
                     type: integer
                     example: 1
         "400":
-          description: Missing username or password
+          description: Отсутствуют обязательные поля (имя пользователя или пароль)
         "500":
-          description: Internal server error
+          description: Ошибка на сервере
 
   /login:
     post:
-      summary: Login an admin
-      description: Logs in an admin with a username and password.
+      summary: Войти в систему как администратор
+      description: Осуществляет вход администратора по имени пользователя и паролю.
       requestBody:
         required: true
         content:
@@ -73,7 +82,7 @@ paths:
                   example: "securepassword"
       responses:
         "200":
-          description: Login successful
+          description: Вход в систему успешен
           content:
             application/json:
               schema:
@@ -81,13 +90,67 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Login successful"
+                    example: "Вход успешен"
                   token:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         "400":
-          description: Missing username or password
+          description: Отсутствуют имя пользователя или пароль
         "401":
-          description: Invalid credentials
+          description: Неверные данные для входа
         "500":
-          description: Internal server error
+          description: Ошибка на сервере
+
+  /admins:
+    get:
+      summary: Получить список всех администраторов
+      description: Возвращает список всех зарегистрированных администраторов.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Список администраторов успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    username:
+                      type: string
+                      example: "admin123"
+                    first_name:
+                      type: string
+                      example: "Иван"
+                    last_name:
+                      type: string
+                      example: "Иванов"
+                    email:
+                      type: string
+                      example: "admin@example.com"
+        "401":
+          description: Неавторизованный доступ, требуется аутентификация
+        "500":
+          description: Ошибка на сервере
+
+  /protected:
+    get:
+      summary: Пример защищённого маршрута
+      description: Это защищённый маршрут, доступ к которому возможен только после аутентификации.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Успешный доступ к защищённому маршруту
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Это защищённый маршрут"
