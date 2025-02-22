@@ -11,7 +11,7 @@ import cors from "cors"; // Импортируем cors
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Swagger definition
 const swaggerDocument = yaml.load(path.resolve(__dirname, "../swagger.yaml"));

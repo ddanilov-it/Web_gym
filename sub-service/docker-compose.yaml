@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  sub-service:
+    build: .
+    container_name: sub_service
+    restart: always
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+      - DB_USER=postgres
+      - DB_HOST=db
+      - DB_NAME=auth_db
+      - DB_PASS=secret
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - auth_service_keys_volume:/app/keys
+
+  db:
+    image: postgres:15
+    container_name: postgres_db_sub
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: auth_db
+    volumes:
+      - pg_data2:/var/lib/postgresql/data
+
+volumes:
+  pg_data2:
+  auth_service_keys_volume:
+    # Указываем, что этот том является внешним
+    external: true # Указываем, что том создан в другом компоузе

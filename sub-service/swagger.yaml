@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: Client and Subscription Management API
+  description: API для управления клиентами и абонементами, доступ к которому получают администраторы.
+  version: 1.0.0
+
+servers:
+  - url: http://156.253.220.36:5001
+    description: Локальный сервер
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /clients:
+    get:
+      summary: Получить список клиентов
+      description: Получить список всех клиентов, доступно только авторизованным администраторам.
+      operationId: getAllClients
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Список клиентов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: "John Doe"
+                    email:
+                      type: string
+                      example: "johndoe@example.com"
+                    subscriptionStatus:
+                      type: string
+                      example: "Active"
+        '401':
+          description: Не авторизован
+        '500':
+          description: Ошибка сервера
+    post:
+      summary: Создать нового клиента
+      description: Создать нового клиента, доступно только авторизованным администраторам.
+      operationId: createClient
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: "John"
+                lastName:
+                  type: string
+                  example: "Doe"
+                patronymic:
+                  type: string
+                  example: "Ivanovich"
+                email:
+                  type: string
+                  example: "johndoe@example.com"
+                phone:
+                  type: string
+                  example: "+1234567890"
+      responses:
+        '201':
+          description: Клиент успешно создан
+        '400':
+          description: Ошибка ввода данных
+        '401':
+          description: Не авторизован
+        '500':
+          description: Ошибка сервера
+
+  /clients/{clientId}:
+    get:
+      summary: Получить клиента по ID
+      description: Получить информацию о клиенте по его ID, доступно только авторизованным администраторам.
+      operationId: getClientById
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          description: ID клиента
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Информация о клиенте
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: "John Doe"
+                  email:
+                    type: string
+                    example: "johndoe@example.com"
+                  subscriptionStatus:
+                    type: string
+                    example: "Active"
+        '401':
+          description: Не авторизован
+        '404':
+          description: Клиент не найден
+        '500':
+          description: Ошибка сервера
+
+  /subscriptions:
+    post:
+      summary: Создать новый абонемент
+      description: Создать новый абонемент для клиента, доступно только авторизованным администраторам.
+      operationId: createSubscription
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  type: integer
+                  example: 1
+                startDate:
+                  type: string
+                  format: date
+                  example: "2025-01-01"
+                endDate:
+                  type: string
+                  format: date
+                  example: "2026-01-01"
+                status:
+                  type: string
+                  example: "Active"
+      responses:
+        '201':
+          description: Абонемент успешно создан
+        '400':
+          description: Ошибка ввода данных
+        '401':
+          description: Не авторизован
+        '404':
+          description: Клиент не найден
+        '500':
+          description: Ошибка сервера
+
+  /subscriptions/{subscriptionId}:
+    delete:
+      summary: Удалить абонемент
+      description: Удалить абонемент по ID клиента, доступно только авторизованным администраторам.
+      operationId: removeSubscription
+      parameters:
+        - in: path
+          name: subscriptionId
+          required: true
+          description: ID абонемента
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Абонемент удален
+        '400':
+          description: Ошибка ввода данных
+        '401':
+          description: Не авторизован
+        '404':
+          description: Абонемент не найден
+        '500':
+          description: Ошибка сервера
+
+security:
+  - bearerAuth: []
