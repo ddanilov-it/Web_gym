@@ -17,7 +17,8 @@
     "pg": "^8.13.3",
     "sequelize": "^6.37.5",
     "swagger-ui-express": "^5.0.1",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

@@ -1,26 +1,26 @@
-import { Pool } from "pg";
+import { Sequelize } from "sequelize";
 import { config } from "../config";
 
-export const pool = new Pool(config.db);
+export const sequelize = new Sequelize(
+  config.db.database!,
+  config.db.user!,
+  config.db.password!,
+  {
+    dialect: "postgres",
+    host: config.db.host,
+    port: config.db.port,
+
+
+    logging: false,
+  }
+);
 
 export const initDb = async () => {
   try {
-    await pool.connect();
+    await sequelize.authenticate();
     console.log("Database connected");
-
-    const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS admins (
-                id SERIAL PRIMARY KEY,
-                username VARCHAR(100) NOT NULL UNIQUE,
-                email VARCHAR(100) NOT NULL UNIQUE,
-                password VARCHAR(100) NOT NULL,
-                first_name VARCHAR(100) NOT NULL,
-                last_name VARCHAR(100) NOT NULL
-            );
-        `;
-
-    await pool.query(createTableQuery);
-    console.log("Admins table created (if it didn't exist)");
+    await sequelize.sync({ alter: true });
+    console.log("All models synchronized");
   } catch (error) {
     console.error("Database connection failed", error);
     throw error;
