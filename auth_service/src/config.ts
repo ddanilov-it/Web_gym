@@ -14,7 +14,7 @@ const privateKey = fs.readFileSync(privateKeyPath, "utf8");
 const publicKey = fs.readFileSync(publicKeyPath, "utf8");
 
 export const config = {
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 5000,
     db: {
         user: process.env.DB_USER,
         host: process.env.DB_HOST,
