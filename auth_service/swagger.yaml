@@ -4,9 +4,9 @@ info:
   description: API для регистрации и аутентификации администраторов.
   version: 1.0.0
 servers:
-  - url: http://156.253.220.36:5000/api
+  - url: http://156.253.220.36:5000
     description: Локальный сервер разработки
-  - url: http://localhost:5000/api
+  - url: http://localhost:5000
     description: Локальный сервер разработки
 
 components:

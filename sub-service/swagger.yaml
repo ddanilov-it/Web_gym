@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Client and Subscription Management API
-  description: API для управления клиентами и абонементами, доступ к которому получают администраторы.
+  description: API для управления клиентами и абонементами.
   version: 1.0.0
 
 servers:
@@ -21,7 +21,7 @@ paths:
   /clients:
     get:
       summary: Получить список клиентов
-      description: Получить список всех клиентов, доступно только авторизованным администраторам.
+      description: Получить список всех клиентов.
       operationId: getAllClients
       security:
         - bearerAuth: []
@@ -59,7 +59,7 @@ paths:
           description: Ошибка сервера
     post:
       summary: Создать нового клиента
-      description: Создать нового клиента, доступно только авторизованным администраторам.
+      description: Создать нового клиента.
       operationId: createClient
       security:
         - bearerAuth: []
@@ -98,7 +98,7 @@ paths:
   /clients/{clientId}:
     delete:
       summary: Удалить клиента
-      description: Удалить клиента по ID, доступно только авторизованным администраторам.
+      description: Удалить клиента по ID.
       operationId: removeClient
       parameters:
         - in: path
@@ -124,7 +124,7 @@ paths:
   /subscriptions:
     get:
       summary: Получить список абонементов
-      description: Получить список всех абонементов, доступно только авторизованным администраторам.
+      description: Получить список всех абонементов.
       operationId: getAllSubscriptions
       security:
         - bearerAuth: []
@@ -161,7 +161,7 @@ paths:
           description: Ошибка сервера
     post:
       summary: Создать новый абонемент
-      description: Создать новый абонемент для клиента, доступно только авторизованным администраторам.
+      description: Создать новый абонемент для клиента.
       operationId: createSubscription
       security:
         - bearerAuth: []
@@ -201,7 +201,7 @@ paths:
   /subscriptions/{subscriptionId}:
     delete:
       summary: Удалить абонемент
-      description: Удалить абонемент по ID, доступно только авторизованным администраторам.
+      description: Удалить абонемент по ID.
       operationId: removeSubscription
       parameters:
         - in: path

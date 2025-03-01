@@ -7,6 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import yaml from "yamljs";
 import cors from "cors"; // Импортируем cors
+import morgan from 'morgan';
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
@@ -24,10 +25,11 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions)); // Подключаем CORS middleware
+app.use(morgan('combined'));
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
-app.use("/api", authRoutes);
+app.use("/", authRoutes);
 
 initDb().then(() => {
     app.listen(port, () => {

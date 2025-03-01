@@ -5,7 +5,6 @@ import { hashPassword, comparePassword } from "../services/passwordService";
 import { generateToken } from "../services/authServices";
 import { z } from "zod";
 
-// Схема валидации для регистрации
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -14,15 +13,11 @@ const registerSchema = z.object({
   email: z.string().email("Invalid email format"),
 });
 
-// Схема валидации для логина
 const loginSchema = z.object({
   email: z.string().email("Invalid email format"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-/**
- * Обработчик для стандартных ошибок
- */
 const handleError = (res: Response, statusCode: number, message: string, details?: any) => {
   res.status(statusCode).json({
     error: {
@@ -33,9 +28,6 @@ const handleError = (res: Response, statusCode: number, message: string, details
   });
 };
 
-/**
- * Регистрация нового администратора
- */
 export const registerAdmin = asyncHandler(async (req: Request, res: Response) => {
   const validation = registerSchema.safeParse(req.body);
 
@@ -66,9 +58,6 @@ export const registerAdmin = asyncHandler(async (req: Request, res: Response) =>
   }
 });
 
-/**
- * Авторизация администратора
- */
 export const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
   const validation = loginSchema.safeParse(req.body);
 
@@ -100,9 +89,6 @@ export const loginAdmin = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-/**
- * Получить всех администраторов
- */
 export const getAllAdmins = asyncHandler(async (req: Request, res: Response) => {
   try {
     const admins = await getAdminsFromRepo();
