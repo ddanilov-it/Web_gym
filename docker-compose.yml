@@ -41,7 +41,7 @@ services:
     volumes:
       - ./sub-service:/app
       - /app/node_modules
-      - auth_service_keys_volume:/app/keys
+      - web_gym_keys_volume:/app/keys
     networks:
       - backend
 
@@ -100,7 +100,7 @@ volumes:
   pg_data:
   pg_data2:
   keys_volume:
-  auth_service_keys_volume:
+  web_gym_keys_volume:
     external: true # Указываем, что этот том создан в другом компоузе
 
 networks:

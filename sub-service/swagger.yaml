@@ -40,19 +40,16 @@ paths:
                       example: 1
                     firstName:
                       type: string
-                      example: "John"
+                      example: "Петр"
                     lastName:
                       type: string
-                      example: "Doe"
+                      example: "Петров"
                     email:
                       type: string
-                      example: "johndoe@example.com"
+                      example: "petr@example.com"
                     phone:
                       type: string
-                      example: "+1234567890"
-                    subscriptionStatus:
-                      type: string
-                      example: "Active"
+                      example: "89002003040"
         '401':
           description: Не авторизован
         '500':
@@ -72,19 +69,19 @@ paths:
               properties:
                 firstName:
                   type: string
-                  example: "John"
+                  example: "Петр"
                 lastName:
                   type: string
-                  example: "Doe"
+                  example: "Петров"
                 patronymic:
                   type: string
-                  example: "Ivanovich"
+                  example: "Петрович"
                 email:
                   type: string
-                  example: "johndoe@example.com"
+                  example: "petr@example.com"
                 phone:
                   type: string
-                  example: "+1234567890"
+                  example: "89002003040"
       responses:
         '201':
           description: Клиент успешно создан
@@ -154,7 +151,7 @@ paths:
                       example: "2026-01-01"
                     status:
                       type: string
-                      example: "Active"
+                      example: "Активен"
         '401':
           description: Не авторизован
         '500':
@@ -185,7 +182,7 @@ paths:
                   example: "2026-01-01"
                 status:
                   type: string
-                  example: "Active"
+                  example: "Активен"
       responses:
         '201':
           description: Абонемент успешно создан

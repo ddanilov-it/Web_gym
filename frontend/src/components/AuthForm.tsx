@@ -22,7 +22,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
     e.preventDefault();
     setError('');
 
-    const API_URL = 'http://156.253.220.36:5000/api';
+    const API_URL = 'http://localhost/api/auth';
     const endpoint = isRegister ? `${API_URL}/register` : `${API_URL}/login`;
 
     const userData = isRegister

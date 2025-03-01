@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Client, Subscription } from '../types/types';
 
-const BASE_URL = 'http://156.253.220.36:5001';
+const BASE_URL = 'http://localhost/api/sub';
 
 // Создаём экземпляр Axios
 const api = axios.create({
