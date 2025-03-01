@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { setAuthToken } from '../api/api';
 
 interface AuthFormProps {
   onAuthSuccess: (token: string) => void;
@@ -40,6 +41,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onAuthSuccess }) => {
       } else if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('userEmail', email);
+        setAuthToken(token);
         onAuthSuccess(token);
         console.log('Toooooooooken', token)
         navigate('/subscriptions');  // Редирект после успешного входа
